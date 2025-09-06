@@ -1,28 +1,46 @@
 # Parking Map 2025
-
 Живая карта загруженности платных парковок Москвы.
+Демо: https://smancoding.github.io/parking-map-2025/
 
-**Демо:** https://smancoding.github.io/parking-map-2025/
+## Технологии
+- MapLibre GL JS
+- GitHub Pages (ветка maplibre)
+- Тайлы: CARTO / OpenStreetMap
 
-## Что внутри
-- `index.html` — оболочка.
-- `app.js` — логика карты (Leaflet).
-- `data-in/zones_meta.json` — центроиды и вместимость зон.
-- `data-in/zones.geojson` — границы зон.
-- `data-in/avg_2025.csv` — средняя активность авто (зона × день недели × час).
+## Что есть
+- Линии улиц платных парковок
+- Круги зон с цветом по средней загрузке
+- Число в круге — тариф ₽/час (если есть)
+- Тултип: номер зоны, вместимость, средняя загрузка
 
-## Как обновлять данные
-1. Замените файл в `data-in/` новыми данными (имена те же).
-2. `git add -A && git commit -m "data: update" && git push`.
-Pages развернёт сайт заново; обновления видны всем по ссылке.
+## Структура
+data-in/
+  avg_2025.csv
+  zones.geojson
+  zones_meta.json
+  tariffs.json
+index.html
+app.js
+build_tariffs.py
 
 ## Локальный запуск
+python3 -m http.server 8000
+Открыть http://localhost:8000
 
-Откройте http://localhost:8000
+## Обновление данных
+git add -A
+git commit -m "data: update"
+git push
 
-## Источники
-- Открытые данные г. Москвы (датасет 623) — границы/метаданные.
-- Агрегированные сессии парковок — собственная выгрузка.
+## Тарифы
+python3 build_tariffs.py "/полный/путь/к/data-623-2025-07-15 2.xlsx"
+git add data-in/tariffs.json
+git commit -m "data: update tariffs"
+git push
+
+## Ветка и Pages
+- Основная ветка: maplibre
+- Pages: Deploy from a branch → maplibre / (root)
 
 ## Лицензия
 MIT
