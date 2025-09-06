@@ -1,46 +1,72 @@
 # Parking Map 2025
-Живая карта загруженности платных парковок Москвы.
+
+Живая карта загруженности платных парковок Москвы (MapLibre GL, GitHub Pages).
+
 Демо: https://smancoding.github.io/parking-map-2025/
 
-## Технологии
-- MapLibre GL JS
-- GitHub Pages (ветка maplibre)
-- Тайлы: CARTO / OpenStreetMap
+## Входные данные (`data-in/`)
 
-## Что есть
-- Линии улиц платных парковок
-- Круги зон с цветом по средней загрузке
-- Число в круге — тариф ₽/час (если есть)
-- Тултип: номер зоны, вместимость, средняя загрузка
+Все входные файлы кладём в папку `data-in/` с фиксированными именами:
 
-## Структура
-data-in/
-  avg_2025.csv
-  zones.geojson
-  zones_meta.json
-  tariffs.json
-index.html
-app.js
-build_tariffs.py
+- `data-in/zones.geojson` — геометрия зон (GeoJSON, FeatureCollection).
+- `data-in/zones_meta.json` — метаданные зон (JSON-объект: ключ — код зоны):
+  ```json
+  { "0301": { "center": [37.6201, 55.7535], "capacity": 125 } }
 
-## Локальный запуск
-python3 -m http.server 8000
-Открыть http://localhost:8000
+cat > README.md <<'EOF'
+# Parking Map 2025
 
-## Обновление данных
-git add -A
-git commit -m "data: update"
+Интерактивная карта загруженности платных парковок Москвы (MapLibre GL + GitHub Pages).
+
+Демо: https://smancoding.github.io/parking-map-2025/
+
+## Входные файлы (папка `data-in/`)
+
+Кладите данные сюда, имена фиксированы:
+
+- `data-in/zones.geojson` — границы зон (GeoJSON, FeatureCollection).
+- `data-in/zones_meta.json` — метаданные зон (JSON-объект по коду зоны):
+  ```json
+  { "0301": { "center": [37.6201, 55.7535], "capacity": 125 } }
+
+cat > README.md <<'EOF'
+# Parking Map 2025
+
+Интерактивная карта загруженности платных парковок Москвы (MapLibre GL + GitHub Pages).  
+Демо: https://smancoding.github.io/parking-map-2025/
+
+## Структура данных
+
+Все входные файлы кладём в папку **data-in/** строго с такими именами:
+
+- data-in/zones.geojson — границы зон, GeoJSON FeatureCollection (WGS84).
+- data-in/zones_meta.json — метаданные зон (ключ — код зоны):
+  {
+    "0301": { "center": [37.6201, 55.7535], "capacity": 125 }
+  }
+- data-in/avg_2025.csv — средняя загруженность по часам:
+  zone,dow,hour,avg
+  0301,1,10,2.75
+  где dow = 1..7 (Пн..Вс), hour = 8..20.
+- data-in/tariffs.json — тариф ₽/час по зонам:
+  { "0301": 380, "0304": 150, "0401": 450 }
+
+Если для зоны нет значения в tariffs.json или zones_meta.json, подписи скрываются.
+
+## Обновить данные
+git add data-in
+git commit -m "data: update inputs"
 git push
 
-## Тарифы
+## Собрать tariffs.json из XLSX (один раз на обновление тарифов)
 python3 build_tariffs.py "/полный/путь/к/data-623-2025-07-15 2.xlsx"
 git add data-in/tariffs.json
 git commit -m "data: update tariffs"
 git push
 
-## Ветка и Pages
-- Основная ветка: maplibre
-- Pages: Deploy from a branch → maplibre / (root)
+## Локальный просмотр
+python3 -m http.server 8000
+# затем открыть http://localhost:8000
 
-## Лицензия
-MIT
+GitHub Pages: Deploy from branch → ветка maplibre → (root).  
+Лицензия: MIT
