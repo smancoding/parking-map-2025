@@ -25,5 +25,6 @@
 python3 -m http.server 8000
 затем открыть http://localhost:8000
 
-GitHub Pages: Deploy from branch → ветка maplibre → (root).  
+GitHub Pages: Deploy from branch → ветка maplibre → (root).
+
 Лицензия: MIT
